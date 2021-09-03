@@ -1,0 +1,28 @@
+$color-gray-light: #f0f0f0;
+$color-brown-gray: #a1a1a1;
+
+.offer-page-outer {
+  width: 400px;
+}
+
+.card-outer {
+  padding: 15px;
+  background-color: $color-gray-light;
+  box-shadow: 0 2px 5px 0 lighten($color-brown-gray, 10%);
+  border-radius: 10px;
+
+}
+
+.card-outer .message-content {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.card-outer .messages-text-area {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 6px;
+  height: 72px;
+}
+

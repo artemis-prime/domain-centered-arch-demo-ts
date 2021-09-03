@@ -1,0 +1,134 @@
+$color-brown-gray: #a1a1a1;
+$color-blue: #007bff;
+
+
+.message-header-photo .account-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: block;
+}
+
+.message-author {
+  display: inline;
+  margin-left: 6px;
+  font-weight: 700;
+}
+
+.message-main .date-time,
+.message-edited {
+  margin-left: 6px;
+  display: inline;
+  font-size: 12px;
+  line-height: inherit;
+  font-weight: 400;
+}
+
+.message-content {
+  margin-top: 3px;
+  margin-left: 6px;
+  position: relative;
+}
+
+.message-outer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 18px;
+}
+
+.messages-text-area {
+  width: 100%;
+  height: 78px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  background-color: #eee;
+  font-weight: 400;
+  font-size: 14px;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  padding: 10px;
+  letter-spacing: normal;
+  //color: $color-brown-gray;
+  border: none;
+}
+
+.messages-view-button {
+  display: block;
+  height: 21px;
+  line-height: 12px;
+  font-size: 12px;
+  padding: 4px;
+  padding-bottom: 5px;
+
+  &.transparent-button {
+    background-color: transparent;
+    border: none;
+    padding: 3px;
+    line-height: 18px;
+    font-size: 16px;
+    height: 24px;
+    &:hover {
+      background-color: #eee !important;
+    }
+  }
+
+  i {
+    line-height: 18px;
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+}
+
+.messages-view-buttons-outer {
+  position: absolute;
+  right: 6px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.edit-message-buttons-outer {
+  display: none;
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  flex-direction: row;
+  justify-content: flex-end;
+
+}
+
+.message-content:hover {
+  background-color: #eef !important;
+
+  .edit-message-buttons-outer {
+    display: flex;
+  }
+}
+
+.edit-message-button {
+  &.edit-message-button-edit {
+    color: $color-blue !important;
+  }
+  &.edit-message-button-delete {
+    color: #666 !important;
+  }
+  background-color: transparent !important;
+  border: none;
+  padding: 4px;
+  line-height: 16px;
+  height: 24px;
+  &:hover {
+    background-color: #eee !important;
+  }
+
+  i {
+    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+}
