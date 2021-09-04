@@ -1,7 +1,7 @@
 import React from 'react'
 import './App.scss'
 
-import OfferPage from 'pages/offers/OfferPage'
+import OfferPage from 'pages/offer/OfferPage'
 
 const App: React.FC<{}> = () => (
   <div className='app-outer'>

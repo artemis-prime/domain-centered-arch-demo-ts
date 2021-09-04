@@ -1,6 +1,10 @@
+  // copied from existing files
 $color-brown-gray: #a1a1a1;
 $color-blue: #007bff;
 
+$color-bubble: #eee;
+$color-bubble-editing: #eef;
+$color-editing-border: $color-blue;
 
 .message-header-photo .account-photo {
   width: 40px;
@@ -28,7 +32,32 @@ $color-blue: #007bff;
   margin-top: 3px;
   margin-left: 6px;
   position: relative;
+  border: 1px $color-bubble solid; 
+  cursor: default;
 }
+
+.message-content.allow-edit:hover,
+.message-content.allow-delete:hover {
+  background-color: $color-bubble-editing !important;
+
+  .edit-message-buttons-outer {
+    display: flex;
+  }
+}
+
+.message-outer.message-editing .message-content {
+
+  background-color: $color-bubble-editing !important;
+
+  // Good to 'fake' the border, so there is no 1px jump in size when changing 
+  // from editing to non-editing
+  border-color: $color-editing-border;
+
+  &:hover .edit-message-buttons-outer {
+    display: none;
+  }
+}
+
 
 .message-outer {
   display: flex;
@@ -42,7 +71,7 @@ $color-blue: #007bff;
   height: 78px;
   border-radius: 10px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  background-color: #eee;
+  background-color: $color-bubble;
   font-weight: 400;
   font-size: 14px;
   font-style: normal;
@@ -50,8 +79,17 @@ $color-blue: #007bff;
   line-height: normal;
   padding: 10px;
   letter-spacing: normal;
-  //color: $color-brown-gray;
-  border: none;
+
+  // Good to 'fake' the border, so there is no 1px jump in size when changing 
+  // from editing to non-editing
+  border: 1px $color-bubble solid; 
+  &.messages-text-area-editing {
+    border-color: $color-editing-border
+  }
+
+  &:focus {
+    outline: none
+  }
 }
 
 .messages-view-button {
@@ -98,23 +136,21 @@ $color-blue: #007bff;
   bottom: 3px;
   flex-direction: row;
   justify-content: flex-end;
-
 }
 
-.message-content:hover {
-  background-color: #eef !important;
-
-  .edit-message-buttons-outer {
-    display: flex;
-  }
-}
 
 .edit-message-button {
   &.edit-message-button-edit {
     color: $color-blue !important;
+    .no-edit & {
+      display: none;
+    }
   }
   &.edit-message-button-delete {
     color: #666 !important;
+    .no-delete & {
+      display: none;
+    }
   }
   background-color: transparent !important;
   border: none;

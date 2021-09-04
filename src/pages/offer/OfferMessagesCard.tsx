@@ -7,7 +7,7 @@ import './offerMessagesCard.scss'
 
 const OfferMessagesCard: React.FC<{}> = () => (
   <div className='offer-messages-card card-outer'>
-    <MessagesView messages={messages} allowAttachments />
+    <MessagesView messages={messages} allowAttachments allowDelete allowEdit/>
   </div>
 )
 
