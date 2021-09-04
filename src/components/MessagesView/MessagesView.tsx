@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Form, Button } from 'reactstrap'
 import Linkify from 'react-linkify'
 
@@ -13,16 +13,19 @@ const MessagesView : React.FC<{
   messages: Message[],
   allowAttachments?: boolean,
   allowEdit?: boolean,
-  allowDelete?: boolean
+  allowDelete?: boolean,
+  confirmDeleteFunction?: (message: Message) => Promise<boolean>
 }> = ({
   messages: _messages,
   allowAttachments,
   allowEdit,
-  allowDelete
+  allowDelete,
+  confirmDeleteFunction
 }) => {
   const [editingIndex, setEditingIndex] = useState<number>(-1)
   const [newMessageContent, setNewMessageContent] = useState<string>('')
   const [messages, setMessages] = useState<Message[]>(_messages)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
@@ -78,10 +81,18 @@ const MessagesView : React.FC<{
   const onMessageEditStart = (index: number) => {
     setEditingIndex(index)
     setNewMessageContent(messages[index].content)
-    // TODO: grab focus 
+    inputRef.current && inputRef.current.focus()
   }
 
-  const onMessageDelete = (index: number) => {
+  const onMessageDelete = async (index: number) => {
+
+    if (confirmDeleteFunction) {
+      const confirmed = await confirmDeleteFunction(messages[index])
+      if (!confirmed) {
+        return
+      }
+    }
+
     const copy = [...messages]
     console.log('Message deleted at index: ' + index)
     copy.splice(index, 1)
@@ -90,8 +101,6 @@ const MessagesView : React.FC<{
     setNewMessageContent('')
     setEditingIndex(-1)
   }
-
-  const textAreaProps = (editingIndex >= 0) ? {autoFocus: true} : {}
 
   return (
     <div className='messages-view'>
@@ -111,12 +120,11 @@ const MessagesView : React.FC<{
       </div>
       <div className="messages-card-input">
         <Form onSubmit={handleSubmit} style={{position: 'relative'}}>
-          <textarea className={`messages-text-area ${(editingIndex >= 0) ? 'messages-text-area-editing' : ''}`}
+          <textarea ref={inputRef} className={`messages-text-area ${(editingIndex >= 0) ? 'messages-text-area-editing' : ''}`}
             value={newMessageContent}
             onChange={onTextAreaChange}
             onKeyPress={handleTextAreaKeyPress}
             placeholder="Type a message here..." 
-            {...textAreaProps}
           />
           <div className='messages-view-buttons-outer'>
             {!!allowAttachments && (

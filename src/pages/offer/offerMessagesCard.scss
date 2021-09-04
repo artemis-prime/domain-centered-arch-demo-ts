@@ -26,3 +26,11 @@ $color-brown-gray: #a1a1a1;
   height: 72px;
 }
 
+.offer-messages-card-confirm-delete-modal-outer {
+  .author {
+    font-weight: 500;
+  }
+  .content {
+    font-style: italic;
+  }
+}
