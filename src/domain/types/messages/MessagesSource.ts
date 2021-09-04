@@ -1,8 +1,10 @@
 import type Message from './Message'
 
+// 'key' is any unique id, for example offer.id. 
+// "Get me the messages associated with X".
 export default interface MessagesSource {
-  getMessages(): Message[]
-  addMessage(newMessage: Message): void
-  updateMessage(index: number, content: string, timestamp: Date): void
-  deleteMessage(index: number): void
+  getMessages(key: string): Message[] 
+  addMessage(key: string, newMessage: Message): void
+  updateMessage(key: string, message: Message, newContent: string): void
+  deleteMessage(key: string, message: Message): void
 }

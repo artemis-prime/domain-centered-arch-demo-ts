@@ -12,21 +12,31 @@ import {
 import type { Message } from 'domain/types/messages' 
 
 import { MessagesView } from 'components'
-import messages from 'domain/fixtures/dummyOfferMessages'
 import firstNWords  from 'util/firstNWords'
 
 import './offerMessagesCard.scss'
 
-const OfferMessagesCard: React.FC<{}> = () => (
+import OfferMessagesService from 'domain/offer/OfferMessagesService'
+import messages from 'domain/offer/dummyOfferMessages'
+
+const messagesService = new OfferMessagesService(messages)
+
+const OfferMessagesCard: React.FC<{
+  offerId: string
+}> = ({
+  offerId
+}) => (
   <div className='offer-messages-card card-outer'>
     <MessagesView 
-      messages={messages} 
+      messagesSource={messagesService} 
+      messagesKey={offerId}
       allowAttachments 
       allowDelete 
       allowEdit 
       confirmDeleteFunction={deleteConfirmed}/>
   </div>
 )
+
 
 const deleteConfirmed = async (message: Message) => (
   
