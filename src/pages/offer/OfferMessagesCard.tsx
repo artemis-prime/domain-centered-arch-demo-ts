@@ -9,27 +9,38 @@ import {
   ModalHeader
 } from 'reactstrap'
 
-import type { Message } from 'domain/types/messages' 
+import type { Message } from 'domain/types/messages'
+
+import { useOfferMessagesService } from 'domain/offer/OfferMessagesService'
 
 import { MessagesView } from 'components'
-import messages from 'domain/fixtures/dummyOfferMessages'
 import firstNWords  from 'util/firstNWords'
 
 import './offerMessagesCard.scss'
 
-const OfferMessagesCard: React.FC<{}> = () => (
-  <div className='offer-messages-card card-outer'>
-    <MessagesView 
-      messages={messages} 
-      allowAttachments 
-      allowDelete 
-      allowEdit 
-      confirmDeleteFunction={deleteConfirmed}/>
-  </div>
-)
+const OfferMessagesCard: React.FC<{
+  offerId: string
+}> = ({
+  offerId
+}) => {
+  const messagesService = useOfferMessagesService()
+  return (
+    <div className='offer-messages-card card-outer'>
+      <MessagesView 
+        messagesSource={messagesService} 
+        messagesKey={offerId}
+        allowAttachments 
+        allowDelete 
+        allowEdit 
+        confirmDeleteFunction={deleteConfirmed}/>
+    </div>
+  )
+}
 
 const deleteConfirmed = async (message: Message) => (
   
+    // Note that return type is Promise<boolean> by virtue of the async keyword
+    // (infered from the return type of reactModal, I think)
   await reactModal(({ show, onSubmit, onDismiss }) => (
    
     <Modal isOpen={show} toggle={onDismiss} className='offer-messages-card-confirm-delete-modal-outer'>

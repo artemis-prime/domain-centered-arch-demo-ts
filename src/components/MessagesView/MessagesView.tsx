@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { Form, Button } from 'reactstrap'
 import Linkify from 'react-linkify'
 
-import type { Message } from 'domain/types/messages' 
+import type { Message, MessagesSource } from 'domain/types/messages' 
 
 import DateTimeFormat from 'components/formatters/DateTimeFormat'
 import { ProfilePhoto } from 'components'
@@ -10,13 +10,15 @@ import { ProfilePhoto } from 'components'
 import './messagesView.scss'
 
 const MessagesView : React.FC<{
-  messages: Message[],
+  messagesSource: MessagesSource,
+  messagesKey: string,
   allowAttachments?: boolean,
   allowEdit?: boolean,
   allowDelete?: boolean,
   confirmDeleteFunction?: (message: Message) => Promise<boolean>
 }> = ({
-  messages: _messages,
+  messagesSource,
+  messagesKey,
   allowAttachments,
   allowEdit,
   allowDelete,
@@ -24,7 +26,7 @@ const MessagesView : React.FC<{
 }) => {
   const [editingIndex, setEditingIndex] = useState<number>(-1)
   const [newMessageContent, setNewMessageContent] = useState<string>('')
-  const [messages, setMessages] = useState<Message[]>(_messages)
+  const [messages, setMessages] = useState<Message[]>(messagesSource.getMessages(messagesKey))
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSubmit = (e: any) => {
@@ -33,20 +35,14 @@ const MessagesView : React.FC<{
 
     if (newMessageContent) {
       if (editingIndex >= 0) {
-        const copy = [...messages]
-        console.log('Message update at index: ' + editingIndex)
-        copy.splice(editingIndex, 1, {
-          ...messages[editingIndex],
-          content: newMessageContent,
-          edited: true
-        })
-        setMessages(copy) 
+        messagesSource.updateMessage(messagesKey, messages[editingIndex], newMessageContent)
+        setMessages(messagesSource.getMessages(messagesKey)) 
         setNewMessageContent('')
         setEditingIndex(-1) 
       }
       else {
-        // prefered method: https://stackoverflow.com/questions/54676966/push-method-in-react-hooks-usestate
-        setMessages([...messages, 
+        messagesSource.addMessage(
+          messagesKey,
           {
             author: {
               firstName: 'Artem',
@@ -57,7 +53,8 @@ const MessagesView : React.FC<{
             timestamp: new Date().toJSON(),
             edited: false
           }
-        ])
+        )
+        setMessages(messagesSource.getMessages(messagesKey)) 
         setNewMessageContent('')
       }
     }
@@ -92,11 +89,8 @@ const MessagesView : React.FC<{
         return
       }
     }
-
-    const copy = [...messages]
-    console.log('Message deleted at index: ' + index)
-    copy.splice(index, 1)
-    setMessages(copy) 
+    messagesSource.deleteMessage(messagesKey, messages[index])
+    setMessages(messagesSource.getMessages(messagesKey)) 
     // in case delete was invoked while another message was in edit mode 
     setNewMessageContent('')
     setEditingIndex(-1)
