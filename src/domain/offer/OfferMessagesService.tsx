@@ -1,3 +1,4 @@
+import React, { useContext } from 'react'
 import type { Message, MessagesSource } from 'domain/types/messages'
 import type { Offer } from 'domain/types/offer'
 
@@ -64,12 +65,22 @@ const getMessageIndex = (messages: Message[], message: Message) => (
   )
 )
 
-/*
-export const OfferMessagesProvider = ({})
+export const OfferMessagesServiceContext = React.createContext<MessagesSource | undefined>(undefined)
 
-export const useOfferMessageStore = ({offerMessagesService, children}) => {
-  const {store} = useContext(MobXProviderContext)
-  return store.userStore
+export const useOfferMessagesService = (): MessagesSource => {
+  const result = useContext(OfferMessagesServiceContext) 
+  if(result === undefined) {
+    throw new Error('The useOfferMessagesService hook must be used within a OfferMessagesServiceContext.Provider!')
+  }
+  return result
 }
-*/
+
+export const withOfferMessagesService = (Component: React.ComponentType) => (
+  (props: any) => (
+    <OfferMessagesServiceContext.Consumer>
+      {(service: MessagesSource | undefined) => (<Component {...props} offerMessagesService={service} />)}
+    </OfferMessagesServiceContext.Consumer>
+  )
+)
+
 export default OfferMessagesService
